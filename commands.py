@@ -1,5 +1,5 @@
 import sympy
-import command
+from parsing import command
 
 def equation(expr):
 	"""Converts an equation of the form a+b = c+d into a form sympy can manipulate, in this case c+d-a-b."""
@@ -17,11 +17,11 @@ def solve_for(expr, variable):
 		return str(sympy.solveset(expr, s))
 	except:
 		return "Incorrect equation syntax."
-solve_cmd = command.command("solve", arguments=["expr", ("variable", "x")], run=solve_for, help="Solves the specified equation for the specified variable.")
+solve_cmd = command("solve", arguments=["expr", ("variable", "x")], run=solve_for, help="Solves the specified equation for the specified variable.")
 
 def say_func(text):
 	return text
-say = command.command("say", arguments=["text"], run=say_func)
+say = command("say", arguments=["text"], run=say_func)
 
 def factor_polynomial(expr):
 	try:
@@ -29,7 +29,7 @@ def factor_polynomial(expr):
 		return str(sympy.factor(expr))
 	except:
 		return "Invalid expression syntax."
-factor = command.command("factor", arguments=["expr"], run=factor_polynomial, help="Factors a polynomial with rational coefficients.")
+factor = command("factor", arguments=["expr"], run=factor_polynomial, help="Factors a polynomial with rational coefficients.")
 
 def eval_func(expr):
 	try:
@@ -37,7 +37,7 @@ def eval_func(expr):
 		return str(expr)
 	except:
 		return "Invalid expression syntax."
-eval_cmd = command.command("eval", arguments=["expr"], run = eval_func, help="Evaluate an algebraic expression.")
+eval_cmd = command("eval", arguments=["expr"], run = eval_func, help="Evaluate an algebraic expression.")
 
 def calc_func(expr):
 	try:
@@ -45,7 +45,7 @@ def calc_func(expr):
 		return str(float(expr))
 	except:
 		return "Could not convert expression to float."
-calc = command.command("calc", arguments=["expr"], run = calc_func, help="Evaluates an expression and returns the float evaluation.")
+calc = command("calc", arguments=["expr"], run = calc_func, help="Evaluates an expression and returns the float evaluation.")
 
 def roots_func(expr):
 	try:
@@ -53,7 +53,7 @@ def roots_func(expr):
 		return str(sympy.roots(expr))
 	except:
 		return "Invalid expression syntax."
-roots_cmd = command.command("roots", arguments=["expr"], run = roots_func, help="Return the roots of an equation.")
+roots_cmd = command("roots", arguments=["expr"], run = roots_func, help="Return the roots of an equation.")
 
 def simplify_func(expr):
 	print(expr)
@@ -62,9 +62,9 @@ def simplify_func(expr):
 		return str(sympy.simplify(expr))
 	except:
 		return "Invalid expression syntax."
-simplify_cmd = command.command("simplify", arguments=["expr"], run=simplify_func, help="Siplifies the given expression.")
+simplify_cmd = command("simplify", arguments=["expr"], run=simplify_func, help="Siplifies the given expression.")
 
-class help_command(command.command):
+class help_command(command):
 	def __init__(self, name="help", arguments=[("topic",)], run=None, syntax=None, help="Type help <function> for help on a specific function.", parser=None):
 		super(help_command, self).__init__(name, arguments, run, syntax, help, parser)
 
