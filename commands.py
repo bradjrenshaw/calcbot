@@ -83,13 +83,12 @@ class help_command(command.command):
 
 help_cmd = help_command()
 
-
-
-parser = command.parser()
-parser.add(help_cmd)
-parser.add(solve_cmd)
-parser.add(factor)
-parser.add(eval_cmd)
-parser.add(calc)
-parser.add(roots_cmd)
-parser.add(simplify_cmd)
+commands = {
+	'help': help_cmd,
+	'solve': solve_cmd,
+	'factor': factor,
+	'eval': eval_cmd,
+	'calc': calc,
+	'roots': roots_cmd,
+	'simplify': simplify_cmd,
+}

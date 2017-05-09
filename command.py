@@ -61,8 +61,10 @@ class command(object):
 		return self._syntax
 
 class parser(object):
-	def __init__(self, commands=None):
+	def __init__(self, bot, commands=None, info=None):
+		self.bot = bot #The mbf instance.
 		self.commands = commands if commands else {}
+		self.info = info
 
 	def add(self, cmd):
 		"""Returns true if there were no conflicts, otherwise false."""

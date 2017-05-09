@@ -1,6 +1,7 @@
 from collections import deque
 import os, sys
 
+import command
 import commands
 import logging
 sys.path.append(os.path.abspath("mbf"))
@@ -11,17 +12,22 @@ import utils
 
 logging.basicConfig(level=logging.ERROR)
 info = {'name': 'calc', 'version': 0.1}
-commands.parser.info = info
-
 
 m = mbf.Mbf("alteraeon.com", alter_aeon, port=3010, username="calc", password="mathstuff", autoconnect=False, auto_login=False)
 
+parser = command.parser(m, commands=commands.commands, info=info)
 
 def send_channel(channel_name, msg):
 	"""Send a given message to a given channel."""
 	if msg != "":
 		c = utils.channel_message(channel_name, msg)
 		m.g['send_queue'].append(c)
+
+def tell(who, msg):
+	"""Given a person to send it to and a message, make a tell object and add it to our send queue."""
+	t = utils.tell(who, msg)
+	m.g['send_queue'].append(t)
+
 
 def send(cmd):
 	m.g['send_queue'].append(cmd)
@@ -36,9 +42,20 @@ def handle_channel(text, match):
 	msg = match.group("msg").strip()
 	if msg.startswith(".") and msg[1:] != "":
 		msg = msg[1:]
-		r = commands.parser.match(msg)
+		r = parser.match(msg)
 		if r:
 			send_channel(channel_name, r)
+
+@m.trigger(r"""(?P<name>[a-zA-Z]+) tells you\, \'(?P<message>.+)\'""")
+def tell_received(t, match):
+	"""Trigger that fires when a tell is received."""
+	who = match.group("name")
+	msg = match.group("message")
+	r = parser.match(msg)
+	if r:
+		tell(who, r)
+
+
 
 @m.trigger(r"""Enter Selection\s*->\s*""")
 def login_menu(t, match):
